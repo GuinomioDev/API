@@ -19,14 +19,18 @@ app.get('/usuarios', (req, res) => {
 });
 
 app.get('/usuarios/:id', (req, res) => {
-  const idBusca = Number(req.params.id);
-  const usuario = usuarios.find(u => u.id === idBusca);
+  const usuario = usuarios.find(u => u.id === Number(req.params.id));
+  
+  if (!usuario) return res.status(404).json({ mensagem: "Não encontrado" });
 
-  if (!usuario) {
-    return res.status(404).json({ mensagem: "Usuário não encontrado" });
-  }
+  // Cria um novo objeto apenas com os dados públicos
+  const usuarioPublico = {
+    id: usuario.id,
+    nome: usuario.nome,
+    cidade: usuario.cidade
+  };
 
-  res.json(usuario);
+  res.json(usuarioPublico);
 });
 
 const PORT = process.env.PORT || 10000;
