@@ -1,1 +1,31 @@
+const express = require('express');
+const app = express();
 
+// A TABELA / ARRAY DE USUÁRIOS FICA AQUI:
+const usuarios = [
+  { id: 1, nome: "Ana Silva", email: "ana.silva@email.com", idade: 28, cidade: "São Paulo", ativo: true },
+  { id: 2, nome: "Carlos Oliveira", email: "carlos.o@email.com", idade: 35, cidade: "Rio de Janeiro", ativo: false },
+  { id: 3, nome: "Beatriz Mendes", email: "bea.mendes@email.com", idade: 22, cidade: "Belo Horizonte", ativo: true },
+  { id: 4, nome: "Diego Fernandes", email: "diego.f@email.com", idade: 41, cidade: "Curitiba", ativo: true },
+  { id: 5, nome: "Eduarda Costa", email: "duda.costa@email.com", idade: 19, cidade: "Porto Alegre", ativo: false }
+];
+
+// Rota para listar todos os usuários
+app.get('/usuarios', (req, res) => {
+  res.json(usuarios);
+});
+
+// Rota para buscar um único usuário pelo ID
+app.get('/usuarios/:id', (req, res) => {
+  const idBusca = Number(req.params.id);
+  const usuario = usuarios.find(u => u.id === idBusca);
+
+  if (!usuario) {
+    return res.status(404).json({ mensagem: "Usuário não encontrado" });
+  }
+
+  res.json(usuario);
+});
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`API rodando na porta ${PORT}`));
